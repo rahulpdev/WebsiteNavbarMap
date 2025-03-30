@@ -34,11 +34,11 @@ This document tracks the progress of the Website Navigation Map generator projec
   - [ ] Ensure file naming convention is followed.
 - [ ] **Feature: Concurrency**
   - [ ] Implement thread-per-row processing for CSV validation/crawling.
-  - [ ] Implement a write queue for atomic markdown file generation.
-  - [ ] Implement file locking (`fcntl` or alternative) for output files.
+  - [ ] Implement atomic write pattern using temporary files and `os.rename` to mitigate race conditions.
+  - [ ] Implement write-ahead logging with transaction markers (e.g., `.lock` files) to handle partial writes. (Note: Parallel write data corruption is not considered a primary risk for this phase).
 - [ ] **Feature: Error Handling & Logging**
   - [ ] Implement comprehensive logging (info, warning, error) in a structured format.
-  - [ ] Ensure all specified error types (Network, Parsing, I/O) are handled.
+  - [ ] Ensure all specified error types (Network, Parsing, I/O, Concurrency) are handled.
 
 ### Goal 2: Documentation & Setup
 
@@ -75,5 +75,5 @@ This document tracks the progress of the Website Navigation Map generator projec
 - `codebase_summary.md`: v1.1 (Added implementation plan ref) - 2025-03-30
 - `tech_stack.md`: v1.0 (Initial) - 2025-03-30
 - `current_task.md`: v1.0 (Initial) - 2025-03-30
-- `project_tracker.md`: v1.1 (Added implementation plan task) - 2025-03-30
+- `project_tracker.md`: v1.2 (Refined concurrency tasks) - 2025-03-30
 - `implementation_plan.md`: v1.0 (Initial) - 2025-03-30

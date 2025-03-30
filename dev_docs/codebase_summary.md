@@ -8,8 +8,8 @@ This project aims to generate navigation map markdown files for websites based o
 
 1.  **URL/CSV Processor:** Reads and validates URLs from CSV files located in a designated project root folder. Handles errors gracefully without blocking other valid entries.
 2.  **Navigation Crawler:** Traverses website navigation menus recursively, extracts page details (name, URL, last updated), and generates the markdown tree diagram. Outputs files to a designated project root folder.
-3.  **Concurrency System:** Manages concurrent processing of URLs, likely using a thread-per-row approach with a write queue and file locking for safe markdown file generation.
-4.  **User Interface (CLI):** Provides a command-line interface for users to select which validated URL from the CSV(s) to process.
+3.  **Concurrency System:** Manages concurrent processing of URLs using a thread pool (`concurrent.futures.ThreadPoolExecutor`). Mitigates file write conflicts using atomic writes (temporary file + `os.rename`) for race conditions and write-ahead logging (`.lock` files) for partial write detection. Parallel write data corruption is not actively prevented in the initial implementation.
+4.  **User Interface (CLI):** Provides a command-line interface for users to select which validated URL from the CSV(s) to process, triggering the concurrent processing framework.
 
 ## Data Flow
 
@@ -29,6 +29,7 @@ flowchart LR
 ## Recent Significant Changes
 
 - Initial project setup and Memory Bank initialization.
+- Refined concurrency strategy: Adopted thread pool, atomic writes, and write-ahead logging; adjusted implementation plan phase order.
 
 ## User Feedback Integration
 

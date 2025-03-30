@@ -69,11 +69,22 @@ This document outlines the step-by-step plan for developing the Website Navigati
     - **`write_map_file(filepath, content)`:** Function to write the markdown string to the specified path in `output_maps/`.
       - Ensure the `output_maps/` directory exists.
       - Use `try-except` to handle `IOError` and log errors.
-      - **Concurrency:** Implement file locking (`fcntl` on Unix, potentially `msvcrt` on Windows, or a lock file mechanism for cross-platform) here to ensure atomic writes if called concurrently.
+      - **Concurrency Mitigation:**
+        - Implement atomic writes using `tempfile.NamedTemporaryFile` and `os.rename` to prevent race conditions when writing the final map file.
+        - Implement write-ahead logging using a simple `.lock` file mechanism (create before write, delete after successful rename) to signal ongoing writes and potentially recover from partial writes (though full recovery logic might be complex).
 
-## Phase 3: Integration and CLI
+## Phase 3: Concurrency Implementation
 
-8.  **Main Script (`src/main.py`):**
+8.  **Concurrency Framework (`src/main.py` or `src/runner.py`):**
+    - Implement a thread pool executor (`concurrent.futures.ThreadPoolExecutor`) to manage concurrent tasks.
+    - Define a worker function that takes a URL, performs the crawl (`crawler.crawl_navigation`, `crawler.format_tree`), generates the filename (`file_writer.generate_filename`), and writes the file using the thread-safe `file_writer.write_map_file` (including atomic write and lock file logic).
+    - Design the main logic to submit crawling tasks for URLs (either selected by user later in Phase 4, or potentially all valid URLs for initial testing) to the thread pool.
+    - Ensure results (success/failure) from threads are collected and logged appropriately.
+    - Test the concurrency mechanism with dummy tasks first to ensure the file writing logic (atomic writes, lock files) works correctly under concurrent access before integrating the actual crawler.
+
+## Phase 4: Integration and CLI
+
+9.  **Main Script (`src/main.py`):**
     - Import necessary modules and configure logging using `logger_config`.
     - Call `csv_processor.load_all_valid_urls` to get the list of target sites.
     - **CLI Interaction:**
@@ -81,32 +92,26 @@ This document outlines the step-by-step plan for developing the Website Navigati
       - Display a numbered list of unique website domains/names derived from the valid URLs.
       - Loop prompt for user input (number or "exit").
       - Validate input against the list range. Handle invalid input and "exit".
-    - **Trigger Crawling:**
+    - **Trigger Concurrent Crawling:**
       - On valid selection, get the corresponding full URL.
-      - Call `crawler.crawl_navigation` for the selected URL.
-      - If crawl successful, call `crawler.format_tree`.
-      - Call `file_writer.generate_filename` and `file_writer.write_map_file`.
-      - Log success or failure of the process for the selected URL.
-    - **Concurrency (Enhancement):** Modify `main.py` or introduce a separate runner script to handle concurrent processing if required (e.g., processing multiple selected URLs or all valid URLs). This would involve:
-      - Using `threading` or `concurrent.futures`.
-      - Passing tasks (URL crawling/writing) to a thread pool.
-      - Ensuring the `write_map_file` function is thread-safe (using the lock).
+      - Submit the selected URL to the concurrency framework (developed in Phase 3) for processing.
+      - Provide feedback to the user (e.g., "Processing started for [URL]..."). The actual file writing happens asynchronously via the framework.
 
-## Phase 4: Testing, Refinement & Documentation
+## Phase 5: Testing, Refinement & Documentation
 
-9.  **Testing:**
+10. **Testing:**
     - Develop unit tests for `validate_url`, `get_website_name`, `format_tree`.
-    - Develop integration tests for CSV processing, crawling (mocking HTTP requests), and file writing.
+    - Develop integration tests for CSV processing, crawling (mocking HTTP requests), file writing, and the concurrency framework (testing atomic writes and lock file behavior under load).
     - Test manually with various real websites to refine `find_nav_links` selectors and crawling logic.
-10. **Refinement:**
+11. **Refinement:**
     - Improve robustness of navigation link identification. Consider making selectors configurable.
-    - Optimize performance if needed.
-    - Ensure all error handling paths are covered and logged appropriately.
-11. **Documentation:**
+    - Optimize performance if needed (e.g., thread pool size).
+    - Ensure all error handling paths (including concurrency errors) are covered and logged appropriately.
+12. **Documentation:**
     - Update all Memory Bank documents (`project_tracker.md`, `current_task.md`, `codebase_summary.md`) to reflect progress and final structure.
-    - Add docstrings and comments to the Python code.
-    - Create a comprehensive `README.md` for the GitHub repository, explaining setup, usage, and project structure.
-12. **GitHub:**
+    - Add docstrings and comments to the Python code, especially explaining the concurrency logic.
+    - Create a comprehensive `README.md` for the GitHub repository, explaining setup, usage, concurrency model, and project structure.
+13. **GitHub:**
     - Push final code and documentation to the public GitHub repository.
     - Ensure at least one example `_nav_map.md` is included or generated as part of a test/demo run.
     - Verify all completion criteria from `project_brief.md` are met.

@@ -2,7 +2,7 @@
 
 ## Context
 
-The initial Memory Bank is established, and a detailed `implementation_plan.md` has been created. The project is now moving into the first phase of development: setting up the foundational structure and environment.
+The initial Memory Bank is established, and a detailed `implementation_plan.md` has been created and subsequently revised. Key decisions include prioritizing the implementation of the concurrency system (now Phase 3) earlier to address potential file writing issues before integrating the full CLI and crawler. The project is now moving into the first phase of development: setting up the foundational structure and environment as per the updated plan.
 
 ## Current Focus
 

@@ -11,7 +11,11 @@ Create and maintain a series of markdown files that each contain a tree structur
 - Output each website's tree structure diagram as a markdown file adhering to naming convention `<website name>_nav_map.md`.
 - Save each `<website name>_nav_map.md` file to the same folder in the project root directory.
 - User must share list of website URLs via a CSV file (or files) saved to a folder in the project root directory.
-- Each CSV file must contain a two column table that contains website full path URLs and .
+- Each CSV file must contain a two column table that contains website full path URLs and navigation selector.
+- Example CSV file content:
+  url,css_selector
+  https://example.com,.nav-menu
+  https://test.com,#main-navigation
 - Each file's contents must be validated before executing downstream processes.
 - If the contents of any row in the file fail validation, this should not block:
   - Other rows of the CSV file from being validated.

@@ -36,4 +36,4 @@ flowchart LR
 
 ## Additional Documentation
 
-- N/A at this stage.
+- `implementation_plan.md`: Detailed step-by-step plan for project development.

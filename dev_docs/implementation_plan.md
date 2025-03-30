@@ -25,6 +25,7 @@ This document outlines the step-by-step plan for developing the Website Navigati
     - Configure logging to output to both console and a rotating file in `logs/`.
     - Use a structured format (JSON) for file logging as specified in the brief.
     - Define standard log levels (INFO, WARNING, ERROR).
+    - Include thread-specific metadata (e.g., thread ID/name) in log records.
 
 ## Phase 2: Core Modules Development
 
@@ -41,7 +42,7 @@ This document outlines the step-by-step plan for developing the Website Navigati
     - **`load_all_valid_urls(directory)`:** Orchestrator function calling `find_csv_files` and `process_csv_file` for each found CSV. Returns a consolidated list of unique, valid URLs.
 5.  **Utility Functions (`src/utils.py`):**
     - **`get_website_name(url)`:** Function to derive a filesystem-safe name from a URL (e.g., `www.example.com` -> `example_com`). This will be used for filenames.
-    - Implement retry logic decorator/function (e.g., exponential backoff) for network requests.
+    - Implement retry logic decorator/function (e.g., exponential backoff with jitter, max 3 attempts) for network requests (`fetch_html`). This will form part of the Retry Circuit Breaker.
 6.  **Crawler Module (`src/crawler.py`):**
 
     - **`fetch_html(url)`:** Function using `requests.get()` to fetch HTML.
@@ -70,17 +71,27 @@ This document outlines the step-by-step plan for developing the Website Navigati
       - Ensure the `output_maps/` directory exists.
       - Use `try-except` to handle `IOError` and log errors.
       - **Concurrency Mitigation:**
-        - Implement atomic writes using `tempfile.NamedTemporaryFile` and `os.rename` to prevent race conditions when writing the final map file.
-        - Implement write-ahead logging using a simple `.lock` file mechanism (create before write, delete after successful rename) to signal ongoing writes and potentially recover from partial writes (though full recovery logic might be complex).
+        - Implement atomic writes using `tempfile.NamedTemporaryFile` and `os.rename` to prevent race conditions.
+        - Implement write-ahead logging using a `.lock` file (create before write, delete after successful rename).
+        - Implement stale lock file cleanup (e.g., check timestamp on startup or periodically, remove locks older than a threshold like 5 minutes).
 
-## Phase 3: Concurrency Implementation
+## Phase 3: Concurrency Implementation & Enhancements
 
-8.  **Concurrency Framework (`src/main.py` or `src/runner.py`):**
-    - Implement a thread pool executor (`concurrent.futures.ThreadPoolExecutor`) to manage concurrent tasks.
-    - Define a worker function that takes a URL, performs the crawl (`crawler.crawl_navigation`, `crawler.format_tree`), generates the filename (`file_writer.generate_filename`), and writes the file using the thread-safe `file_writer.write_map_file` (including atomic write and lock file logic).
-    - Design the main logic to submit crawling tasks for URLs (either selected by user later in Phase 4, or potentially all valid URLs for initial testing) to the thread pool.
-    - Ensure results (success/failure) from threads are collected and logged appropriately.
-    - Test the concurrency mechanism with dummy tasks first to ensure the file writing logic (atomic writes, lock files) works correctly under concurrent access before integrating the actual crawler.
+8.  **Concurrency Framework (`src/concurrency_manager.py` or similar):**
+    - Implement a thread pool executor (`concurrent.futures.ThreadPoolExecutor`) with configurable size (e.g., `min(32, os.cpu_count() + 4)`).
+    - Define a worker function that encapsulates the task (URL -> crawl -> format -> write).
+    - **Retry Circuit Breaker:**
+      - Integrate the retry logic (from `utils.py`) into the worker function execution.
+      - Handle retry exhaustion (log error, potentially move to DLQ).
+      - (Optional) Implement fallback to synchronous processing if the pool is consistently overwhelmed (complex).
+    - **Dead Letter Queue (DLQ):**
+      - Implement a simple file-based queue (`dlq.log` or similar) to store details of tasks that failed permanently (after retries).
+      - Log errors clearly when adding to the DLQ.
+      - (Optional) Implement a separate utility or logic on startup to attempt reprocessing DLQ items.
+    - **Task Submission & Result Handling:**
+      - Design the main logic (`main.py` or `runner.py`) to submit crawling tasks to the thread pool via the concurrency manager.
+      - Ensure results (success, failure, moved-to-DLQ) from threads are collected and logged appropriately.
+    - **Testing:** Test the concurrency mechanism, including retry and DLQ logic, with mock tasks before integrating the actual crawler.
 
 ## Phase 4: Integration and CLI
 
@@ -106,7 +117,7 @@ This document outlines the step-by-step plan for developing the Website Navigati
 11. **Refinement:**
     - Improve robustness of navigation link identification. Consider making selectors configurable.
     - Optimize performance if needed (e.g., thread pool size).
-    - Ensure all error handling paths (including concurrency errors) are covered and logged appropriately.
+    - Ensure all error handling paths (including concurrency errors, retry failures) are covered and logged appropriately.
 12. **Documentation:**
     - Update all Memory Bank documents (`project_tracker.md`, `current_task.md`, `codebase_summary.md`) to reflect progress and final structure.
     - Add docstrings and comments to the Python code, especially explaining the concurrency logic.

@@ -33,12 +33,21 @@ This document tracks the progress of the Website Navigation Map generator projec
   - [ ] Ensure output files are saved to a designated output folder.
   - [ ] Ensure file naming convention is followed.
 - [ ] **Feature: Concurrency**
-  - [ ] Implement thread-per-row processing for CSV validation/crawling.
+  - [ ] Implement thread pool executor (`concurrent.futures.ThreadPoolExecutor`) for managing tasks.
   - [ ] Implement atomic write pattern using temporary files and `os.rename` to mitigate race conditions.
-  - [ ] Implement write-ahead logging with transaction markers (e.g., `.lock` files) to handle partial writes. (Note: Parallel write data corruption is not considered a primary risk for this phase).
+  - [ ] Implement write-ahead logging with transaction markers (e.g., `.lock` files) to handle partial writes.
+  - [ ] Implement stale lock file cleanup mechanism (e.g., timestamp-based).
+  - [ ] **Enhancement: Retry Circuit Breaker**
+    - [ ] Implement exponential backoff with jitter for retries (max 3 attempts).
+    - [ ] Implement fallback to synchronous mode on thread exhaustion (TBD).
+  - [ ] **Enhancement: Dead Letter Queue (DLQ)**
+    - [ ] Implement persistent storage for failed tasks (e.g., simple file-based queue).
+    - [ ] Implement mechanism to log/notify about DLQ entries.
+    - [ ] (Optional) Implement automatic retry from DLQ on system restart.
 - [ ] **Feature: Error Handling & Logging**
-  - [ ] Implement comprehensive logging (info, warning, error) in a structured format.
+  - [ ] Implement comprehensive logging (info, warning, error) in a structured format (JSON for files).
   - [ ] Ensure all specified error types (Network, Parsing, I/O, Concurrency) are handled.
+  - [ ] Integrate thread-specific metadata into logs.
 
 ### Goal 2: Documentation & Setup
 
@@ -75,5 +84,5 @@ This document tracks the progress of the Website Navigation Map generator projec
 - `codebase_summary.md`: v1.1 (Added implementation plan ref) - 2025-03-30
 - `tech_stack.md`: v1.0 (Initial) - 2025-03-30
 - `current_task.md`: v1.0 (Initial) - 2025-03-30
-- `project_tracker.md`: v1.2 (Refined concurrency tasks) - 2025-03-30
-- `implementation_plan.md`: v1.0 (Initial) - 2025-03-30
+- `project_tracker.md`: v1.4 (Removed Resource Governor) - 2025-03-30
+- `implementation_plan.md`: v1.2 (Added concurrency enhancements) - 2025-03-30

@@ -2,7 +2,7 @@
 
 ## Context
 
-The initial Memory Bank is established, and a detailed `implementation_plan.md` has been created and subsequently revised. Key decisions include prioritizing the implementation of the concurrency system (now Phase 3) earlier to address potential file writing issues before integrating the full CLI and crawler. The project is now moving into the first phase of development: setting up the foundational structure and environment as per the updated plan.
+The initial Memory Bank is established. Following a review, the project design and architecture have been refined, particularly concerning concurrency. Key decisions include prioritizing the implementation of an enhanced concurrency system (now Phase 3) earlier in the development cycle. This system incorporates atomic writes, write-ahead logging, a retry circuit breaker, and a dead letter queue. The previously planned Resource Governor has been removed based on recent feedback. These changes have been documented across the Memory Bank (`project_tracker.md`, `implementation_plan.md`, `codebase_summary.md`, `tech_stack.md`). The project is now ready to move into the first phase of development: setting up the foundational structure and environment as per the updated plan.
 
 ## Current Focus
 

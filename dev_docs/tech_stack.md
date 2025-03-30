@@ -18,14 +18,20 @@
   - _Justification:_ Built-in Python module suitable for CSV operations, including validation as required by the brief.
   - _Consequences:_ Requires CSV files to be well-formatted. Validation logic needs to be implemented carefully.
 
-## Concurrency
+## Concurrency & Resilience
 
-- **Threading:** Thread-per-row processing for handling multiple URLs concurrently.
-  - _Justification:_ Mentioned in the brief's component description. Suitable for I/O-bound tasks like web crawling.
-  - _Consequences:_ Requires careful management of shared resources (like file writing) using mechanisms like queues and locks to prevent race conditions.
-- **Write Queue:** To manage writing to markdown files atomically.
-  - _Justification:_ Mentioned in the brief's component description. Ensures that concurrent threads do not corrupt output files.
-  - _Consequences:_ Adds complexity to the writing process.
+- **`concurrent.futures.ThreadPoolExecutor`:** Manages a pool of threads for executing crawling tasks concurrently.
+  - _Justification:_ Standard Python library for managing thread pools, simplifying concurrent task execution for I/O-bound operations. Replaces simpler "thread-per-row" concept.
+  - _Consequences:_ Requires careful pool size configuration. Still necessitates thread-safe handling of shared resources.
+- **Atomic Writes & Write-Ahead Logging (WAL):** Using `tempfile.NamedTemporaryFile` + `os.rename` and `.lock` files for safe file output.
+  - _Justification:_ Prevents race conditions during file writes and provides a mechanism to detect/handle partial writes. Replaces simpler "Write Queue" concept.
+  - _Consequences:_ Adds complexity to the file writing logic, requires handling of stale lock files.
+- **Retry Circuit Breaker (Custom Logic):** Using exponential backoff with jitter for retrying failed tasks (e.g., network errors).
+  - _Justification:_ Improves resilience against transient failures.
+  - _Consequences:_ Increases complexity in task execution logic, requires defining retry limits and conditions.
+- **Dead Letter Queue (DLQ) (Custom Logic):** Simple file-based queue for persistently failed tasks.
+  - _Justification:_ Prevents loss of information about tasks that could not be completed after retries. Allows for later inspection or manual retry.
+  - _Consequences:_ Requires implementation of DLQ writing and potentially reading/reprocessing logic. Adds another file to manage.
 
 ## Version Control
 
@@ -41,6 +47,9 @@
 - **Folder Structure:** Using dedicated folders for input CSVs and output markdown files within the project root.
   - _Justification:_ Organizes project artifacts clearly as per the brief's requirements.
   - _Consequences:_ Scripts need to correctly reference these folder paths.
-- **Error Handling Strategy:** Robust `try-except` blocks, logging, and retry logic for network/parsing issues. Non-blocking validation for CSV processing.
-  - _Justification:_ Explicitly required by the brief to ensure resilience.
-  - _Consequences:_ Increases code complexity but improves reliability.
+- **Error Handling Strategy:** Robust `try-except` blocks, structured logging (JSON), and specific handling for Network, Parsing, I/O, and Concurrency errors.
+  - _Justification:_ Explicitly required by the brief and enhanced by the concurrency design to ensure resilience and observability.
+  - _Consequences:_ Increases code complexity but improves reliability and diagnosability.
+- **Enhanced Concurrency Model:** Incorporating atomic writes, WAL, retries, and DLQ.
+  - _Justification:_ Addresses potential issues with simple threading and improves overall robustness and stability under load.
+  - _Consequences:_ Increases the complexity of the concurrency implementation compared to basic threading. Requires careful testing.

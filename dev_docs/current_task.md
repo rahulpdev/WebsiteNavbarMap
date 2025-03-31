@@ -13,6 +13,7 @@ Phases 1 through 4 are complete. The core application logic, including CSV proce
 - Fixed deprecated `datetime.utcfromtimestamp` method in `src/logger_config.py`.
 - All planned coding, testing (initial unit tests), refinement, and documentation tasks are complete.
 - User has confirmed completion of GitHub repository creation and initial push.
+- **Bug Fix:** Corrected crawler logic in `src/crawler.py` to prevent duplicate URLs in the output map by strictly ignoring already visited links during tree construction.
 
 ## Next Steps
 

@@ -206,21 +206,8 @@ def crawl_navigation(start_url, css_selector):
                 parent_node[link_url] = new_node
                 # Add the new URL to the queue to crawl its children
                 queue.append((link_url, new_node['children']))
-            else:
-                # If visited, ensure it exists in the current parent's
-                #  children (handles non-tree structures)
-                if link_url not in parent_node:
-                    # This indicates a link back to an already processed node
-                    #  from a different branch
-                    # We can represent this by adding it without children here,
-                    #  or ignore it
-                    # For a simple tree, we might ignore it or link to the
-                    #  existing node representation
-                    # For now, add it simply without adding to queue again.
-                    parent_node[link_url] = {'name': link_text, 'children': {}}  # Represent as leaf here
-                    logger.debug(
-                        f"Link to already visited URL found: {link_url} (from {current_url})"
-                    )
+            # else: # If already visited, do not add it again to enforce a strict tree structure.
+            #     logger.debug(f"Skipping already visited link: {link_url} (found under {current_url})")
 
     # The initial nav_tree might be empty if the start_url fetch failed.
     # We need a way to represent the root node itself. Let's wrap the result.

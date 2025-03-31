@@ -1,0 +1,26 @@
+# Python standard ignores
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env
+
+# Project specific ignores
+input_csvs/
+output_maps/
+logs/
+*.lock
+*.tmp
+dlq.log
+
+# macOS specific ignores
+.DS_Store
+
+# IDE specific ignores
+.vscode/

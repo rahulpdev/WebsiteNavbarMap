@@ -8,46 +8,46 @@ This document tracks the progress of the Website Navigation Map generator projec
 
 ### Goal 1: Core Functionality - Generate Navigation Maps
 
-- [ ] **Feature: CSV Input Processing**
-  - [ ] Implement script to read CSV files from a designated input folder.
-  - [ ] Implement URL validation logic (format, whitespace).
-  - [ ] Implement non-blocking validation (process valid rows even if others fail).
-  - [ ] Implement error logging for invalid rows (including line numbers).
-- [ ] **Feature: Command Line Interface (CLI)**
-  - [ ] Display numbered list of validated URLs (domain only) from CSVs.
-  - [ ] Prompt user for numerical input corresponding to a URL.
-  - [ ] Validate user input (must be a valid number in the list or "exit").
-  - [ ] Handle invalid input and re-prompt.
-  - [ ] Handle "exit" command.
-  - [ ] Trigger crawling process upon valid selection.
-- [ ] **Feature: Website Navigation Crawling**
-  - [ ] Implement function to fetch website HTML content.
-  - [ ] Implement logic to identify navigation menu elements (requires robust selectors).
-  - [ ] Implement recursive traversal of sub-menus.
-  - [ ] Extract page details: name, full URL, last updated (if available).
-  - [ ] Handle network errors gracefully (retry logic, logging).
-  - [ ] Handle HTML parsing errors gracefully (logging).
-- [ ] **Feature: Markdown Output Generation**
-  - [ ] Implement logic to format extracted data into the specified tree structure.
-  - [ ] Implement function to write the tree structure to a `<website_name>_nav_map.md` file.
-  - [ ] Ensure output files are saved to a designated output folder.
-  - [ ] Ensure file naming convention is followed.
-- [ ] **Feature: Concurrency**
-  - [ ] Implement thread pool executor (`concurrent.futures.ThreadPoolExecutor`) for managing tasks.
-  - [ ] Implement atomic write pattern using temporary files and `os.rename` to mitigate race conditions.
-  - [ ] Implement write-ahead logging with transaction markers (e.g., `.lock` files) to handle partial writes.
-  - [ ] Implement stale lock file cleanup mechanism (e.g., timestamp-based).
-  - [ ] **Enhancement: Retry Circuit Breaker**
-    - [ ] Implement exponential backoff with jitter for retries (max 3 attempts).
-    - [ ] Implement fallback to synchronous mode on thread exhaustion (TBD).
-  - [ ] **Enhancement: Dead Letter Queue (DLQ)**
-    - [ ] Implement persistent storage for failed tasks (e.g., simple file-based queue).
-    - [ ] Implement mechanism to log/notify about DLQ entries.
-    - [ ] (Optional) Implement automatic retry from DLQ on system restart.
-- [ ] **Feature: Error Handling & Logging**
-  - [ ] Implement comprehensive logging (info, warning, error) in a structured format (JSON for files).
-  - [ ] Ensure all specified error types (Network, Parsing, I/O, Concurrency) are handled.
-  - [ ] Integrate thread-specific metadata into logs.
+- [x] **Feature: CSV Input Processing**
+  - [x] Implement script to read CSV files from a designated input folder.
+  - [x] Implement URL validation logic (format, whitespace).
+  - [x] Implement non-blocking validation (process valid rows even if others fail).
+  - [x] Implement error logging for invalid rows (including line numbers).
+- [x] **Feature: Command Line Interface (CLI)**
+  - [x] Display numbered list of validated URLs (domain only) from CSVs.
+  - [x] Prompt user for numerical input corresponding to a URL.
+  - [x] Validate user input (must be a valid number in the list or "exit").
+  - [x] Handle invalid input and re-prompt.
+  - [x] Handle "exit" command.
+  - [x] Trigger crawling process upon valid selection.
+- [x] **Feature: Website Navigation Crawling**
+  - [x] Implement function to fetch website HTML content.
+  - [x] Implement logic to identify navigation menu elements (requires robust selectors).
+  - [x] Implement recursive traversal of sub-menus.
+  - [x] Extract page details: name, full URL, last updated (if available).
+  - [x] Handle network errors gracefully (retry logic, logging).
+  - [x] Handle HTML parsing errors gracefully (logging).
+- [x] **Feature: Markdown Output Generation**
+  - [x] Implement logic to format extracted data into the specified tree structure.
+  - [x] Implement function to write the tree structure to a `<website_name>_nav_map.md` file.
+  - [x] Ensure output files are saved to a designated output folder.
+  - [x] Ensure file naming convention is followed.
+- [x] **Feature: Concurrency**
+  - [x] Implement thread pool executor (`concurrent.futures.ThreadPoolExecutor`) for managing tasks.
+  - [x] Implement atomic write pattern using temporary files and `os.rename` to mitigate race conditions.
+  - [x] Implement write-ahead logging with transaction markers (e.g., `.lock` files) to handle partial writes.
+  - [x] Implement stale lock file cleanup mechanism (e.g., timestamp-based).
+  - [x] **Enhancement: Retry Circuit Breaker**
+    - [x] Implement exponential backoff with jitter for retries (max 3 attempts).
+    - [ ] Implement fallback to synchronous mode on thread exhaustion (TBD - Deferred).
+  - [x] **Enhancement: Dead Letter Queue (DLQ)**
+    - [x] Implement persistent storage for failed tasks (e.g., simple file-based queue).
+    - [x] Implement mechanism to log/notify about DLQ entries.
+    - [ ] (Optional) Implement automatic retry from DLQ on system restart (Deferred).
+- [x] **Feature: Error Handling & Logging**
+  - [x] Implement comprehensive logging (info, warning, error) in a structured format (JSON for files).
+  - [x] Ensure all specified error types (Network, Parsing, I/O, Concurrency) are handled.
+  - [x] Integrate thread-specific metadata into logs.
 
 ### Goal 2: Documentation & Setup
 
@@ -60,14 +60,21 @@ This document tracks the progress of the Website Navigation Map generator projec
   - [x] Create `project_tracker.md`.
 - [x] **Task: Create Implementation Plan**
   - [x] Create `dev_docs/implementation_plan.md`.
-- [ ] **Task: Set up Project Structure**
-  - [ ] Create input folder for CSV files.
-  - [ ] Create output folder for markdown map files.
-  - [ ] Initialize Git repository.
+- [x] **Task: Set up Project Structure**
+  - [x] Create input folder for CSV files (`input_csvs/`).
+  - [x] Create output folder for markdown map files (`output_maps/`).
+  - [x] Initialize Git repository.
+  - [x] Create `.gitignore`.
+  - [x] Create `requirements.txt`.
+  - [x] Create `src/` structure with placeholder files.
+  - [x] Create `logs/` directory.
+  - [x] Create `tests/` structure.
 - [ ] **Task: Complete Documentation**
   - [ ] Review and refine all Memory Bank documents.
   - [ ] Add comments to code where necessary.
   - [ ] Create README.md for GitHub.
+  - [ ] Create CHANGELOG.md.
+  - [ ] Create `.clineignore`.
 - [ ] **Task: GitHub Repository**
   - [ ] Create public GitHub repository.
   - [ ] Push initial project structure and Memory Bank.
@@ -77,12 +84,18 @@ This document tracks the progress of the Website Navigation Map generator projec
 
 - Initialize Memory Bank (`project_brief.md`, `codebase_summary.md`, `tech_stack.md`, `current_task.md`, `project_tracker.md`).
 - Create `dev_docs/implementation_plan.md`.
+- Set up Project Structure (Folders, Git, `.gitignore`, `requirements.txt`, `src/`, `logs/`, `tests/`).
+- Implement Core Modules (Logging, CSV Processor, Utils, Crawler, File Writer).
+- Implement Concurrency Framework (ThreadPool, Atomic Writes, WAL, Retries, DLQ).
+- Implement CLI Integration (`main.py`).
+- Implement Initial Unit Tests (`tests/test_utils.py`, `tests/test_csv_processor.py`, `tests/test_crawler.py`).
+- Code Refinement (Test file docstrings).
 
 ## Memory Bank Document Versions
 
 - `project_brief.md`: v1.0 (Initial) - 2025-03-30
 - `codebase_summary.md`: v1.1 (Added implementation plan ref) - 2025-03-30
 - `tech_stack.md`: v1.0 (Initial) - 2025-03-30
-- `current_task.md`: v1.0 (Initial) - 2025-03-30
-- `project_tracker.md`: v1.4 (Removed Resource Governor) - 2025-03-30
+- `current_task.md`: v1.5 (Start Phase 5, Step 12) - 2025-03-31
+- `project_tracker.md`: v1.5 (Updated after Phase 4) - 2025-03-31
 - `implementation_plan.md`: v1.2 (Added concurrency enhancements) - 2025-03-30

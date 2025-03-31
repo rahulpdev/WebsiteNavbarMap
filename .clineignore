@@ -1,0 +1,49 @@
+# Ignore patterns for Cline tool
+
+# Sensitive configuration/credentials
+.env*
+*.pem
+*.key
+credentials.*
+config.*
+
+# Data files
+*.csv
+*.xlsx
+*.json # Be careful not to ignore necessary config JSONs
+*.db
+*.sqlite*
+
+# Auto-generated files / Build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+build/
+dist/
+*.egg-info/
+*.log
+*.lock
+*.tmp
+dlq.log # Dead letter queue file
+
+# OS specific
+.DS_Store
+
+# IDE specific
+.vscode/
+.idea/
+
+# Memory Bank / Dev Docs (Assuming Cline shouldn't modify these directly unless asked)
+# dev_docs/
+
+# Input/Output directories (Cline shouldn't modify contents directly)
+input_csvs/
+output_maps/
+logs/
+
+# Virtual environment
+venv/
+env/
+ENV/
+*.venv

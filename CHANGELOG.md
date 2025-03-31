@@ -5,43 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.0] - 2025-03-31
 
 ### Added
 
-- Initial project structure setup.
-- Core modules implementation (CSV processing, crawling, file writing, utilities, logging).
-- Concurrency management using ThreadPoolExecutor.
-- Basic CLI for user interaction.
-- Atomic file writing with locking.
-- Dead Letter Queue for failed tasks.
-- Retry logic for network requests.
-- Initial unit tests for key functions.
-- Memory Bank documentation (`dev_docs/`).
-- README.md
-
-### Changed
-
-- N/A
-
-### Deprecated
-
-- N/A
-
-### Removed
-
-- N/A
+- **Core Functionality:**
+  - CSV input processing with validation and error logging.
+  - Command Line Interface (CLI) for selecting target URLs.
+  - Website navigation crawling with configurable selectors (basic implementation).
+  - Recursive sub-menu traversal.
+  - Extraction of page name, URL, and last updated date (if available).
+  - Markdown output generation in a tree structure (`<website_name>_nav_map.md`).
+- **Concurrency & Robustness:**
+  - Thread pool executor (`concurrent.futures.ThreadPoolExecutor`) for parallel crawling.
+  - Atomic file writing using temporary files and `os.rename`.
+  - Write-ahead logging (`.lock` files) for task state management.
+  - Stale lock file cleanup mechanism.
+  - Exponential backoff retry logic (max 3 attempts) for network errors.
+  - Dead Letter Queue (DLQ) for persistently failed tasks.
+- **Error Handling & Logging:**
+  - Comprehensive logging (INFO, WARNING, ERROR) to console and structured JSON file (`dlq.log`).
+  - Graceful handling of Network, Parsing, I/O, and Concurrency errors.
+  - Thread-specific metadata in logs.
+- **User Experience:**
+  - `tqdm` progress bar during the crawling phase.
+- **Project Setup & Documentation:**
+  - Standard Python project structure (`src/`, `tests/`, `input_csvs/`, `output_maps/`, `logs/`).
+  - `requirements.txt` for dependency management.
+  - `.gitignore` and `.clineignore` files.
+  - Initial unit tests (`pytest`) for utilities, CSV processing, and crawler functions.
+  - Comprehensive Memory Bank documentation in `dev_docs/` (`project_brief.md`, `codebase_summary.md`, `tech_stack.md`, `current_task.md`, `project_tracker.md`, `implementation_plan.md`).
+  - `README.md` with project overview, setup, and usage instructions.
+  - `CHANGELOG.md` following Keep a Changelog format.
 
 ### Fixed
 
-- N/A
-
-### Security
-
-- N/A
-
-## [0.1.0] - YYYY-MM-DD
-
-### Added
-
-- Initial release encompassing all features developed during initial implementation phases.
+- Corrected crawler logic to prevent duplicate URL processing.
+- Resolved indentation error (`continue` outside loop) in `src/crawler.py`.
+- Updated deprecated `datetime.utcfromtimestamp` to `datetime.fromtimestamp(timestamp, timezone.utc)` in `src/logger_config.py`.

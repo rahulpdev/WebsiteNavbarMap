@@ -1,5 +1,15 @@
 # Website Navigation Map Generator
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Dependencies](https://img.shields.io/badge/dependencies-up--to--date-brightgreen.svg)](requirements.txt) <!-- Placeholder: Consider requires.io or similar for dynamic checks -->
+[![Build Status](https://github.com/rahulpdev/WebsiteNavbarMap/actions/workflows/ci.yml/badge.svg)](https://github.com/rahulpdev/WebsiteNavbarMap/actions/workflows/ci.yml) <!-- Assumes a workflow file named ci.yml -->
+[![Coverage Status](https://img.shields.io/badge/coverage-unknown-lightgrey.svg)](https://github.com/rahulpdev/WebsiteNavbarMap) <!-- Placeholder: Integrate Codecov/Coveralls -->
+[![Documentation Status](https://img.shields.io/badge/docs-active-orange.svg)](dev_docs/project_brief.md)
+[![GitHub Issues](https://img.shields.io/github/issues/rahulpdev/WebsiteNavbarMap.svg)](https://github.com/rahulpdev/WebsiteNavbarMap/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/rahulpdev/WebsiteNavbarMap.svg)](https://github.com/rahulpdev/WebsiteNavbarMap/pulls)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/rahulpdev/WebsiteNavbarMap)](https://github.com/rahulpdev/WebsiteNavbarMap/releases/latest)
+
 ## Overview
 
 This tool generates a markdown file containing a tree structure diagram representing a website's navigation menu. It reads website URLs and corresponding CSS selectors for the navigation element from CSV files, crawls the specified navigation menu, and outputs a map file for the selected website.
@@ -93,8 +103,8 @@ WebsiteNavMap/
 │   ├── test_csv_processor.py
 │   └── test_utils.py
 ├── .gitignore
-├── .clineignore        # (To be created) Cline-specific ignores
-├── CHANGELOG.md        # (To be created) Project version history
+├── .clineignore        # Cline-specific ignores
+├── CHANGELOG.md        # Project version history
 ├── README.md           # This file
 └── requirements.txt    # Python dependencies
 ```
@@ -113,7 +123,7 @@ Contributions are welcome! Please follow standard fork-and-pull-request workflow
 
 ## License
 
-(To be added - e.g., MIT License)
+This project is licensed under the MIT License - see the LICENSE file for details (if one is added).
 
 ## FAQs
 

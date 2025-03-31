@@ -13,7 +13,7 @@ venv.bak/
 
 # Project specific ignores
 input_csvs/
-output_maps/
+.clinerules/
 logs/
 *.lock
 *.tmp

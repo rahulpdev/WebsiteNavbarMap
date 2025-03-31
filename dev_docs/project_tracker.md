@@ -72,13 +72,13 @@ This document tracks the progress of the Website Navigation Map generator projec
 - [ ] **Task: Complete Documentation**
   - [ ] Review and refine all Memory Bank documents.
   - [ ] Add comments to code where necessary.
-  - [ ] Create README.md for GitHub.
-  - [ ] Create CHANGELOG.md.
-  - [ ] Create `.clineignore`.
-- [ ] **Task: GitHub Repository**
-  - [ ] Create public GitHub repository.
-  - [ ] Push initial project structure and Memory Bank.
-  - [ ] Ensure at least one example `_nav_map.md` file is present upon completion.
+  - [x] Create README.md for GitHub.
+  - [x] Create CHANGELOG.md.
+  - [x] Create `.clineignore`.
+- [x] **Task: GitHub Repository**
+  - [x] Create public GitHub repository.
+  - [x] Push initial project structure and Memory Bank.
+  - [ ] Ensure at least one example `_nav_map.md` file is present upon completion. (User action pending)
 
 ## Completed Tasks
 
@@ -90,12 +90,14 @@ This document tracks the progress of the Website Navigation Map generator projec
 - Implement CLI Integration (`main.py`).
 - Implement Initial Unit Tests (`tests/test_utils.py`, `tests/test_csv_processor.py`, `tests/test_crawler.py`).
 - Code Refinement (Test file docstrings).
+- Create README.md, CHANGELOG.md, .clineignore.
+- GitHub Repository Setup (Create repo, push initial commit).
 
 ## Memory Bank Document Versions
 
 - `project_brief.md`: v1.0 (Initial) - 2025-03-30
-- `codebase_summary.md`: v1.1 (Added implementation plan ref) - 2025-03-30
+- `codebase_summary.md`: v1.2 (Reflect implemented code) - 2025-03-31
 - `tech_stack.md`: v1.0 (Initial) - 2025-03-30
-- `current_task.md`: v1.6 (Documented logger fix) - 2025-03-31
-- `project_tracker.md`: v1.5 (Updated after Phase 4) - 2025-03-31
+- `current_task.md`: v1.7 (GitHub setup complete) - 2025-03-31
+- `project_tracker.md`: v1.6 (GitHub setup complete) - 2025-03-31
 - `implementation_plan.md`: v1.2 (Added concurrency enhancements) - 2025-03-30

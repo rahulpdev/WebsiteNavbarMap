@@ -17,6 +17,9 @@
 - **Python `csv` module:** For reading and processing CSV files containing website URLs.
   - _Justification:_ Built-in Python module suitable for CSV operations, including validation as required by the brief.
   - _Consequences:_ Requires CSV files to be well-formatted. Validation logic needs to be implemented carefully.
+- **tqdm:** For displaying progress bars in the terminal during long operations (like crawling).
+  - _Justification:_ Provides simple and effective visual feedback to the user during potentially lengthy tasks.
+  - _Consequences:_ Adds a dependency. Progress bar accuracy might vary depending on the operation (e.g., dynamic queue size during crawl).
 
 ## Concurrency & Resilience
 

@@ -1,16 +1,18 @@
 import logging
 import requests
 import time  # Add missing import for test block
+# Removed duplicate logging, requests imports
 from bs4 import BeautifulSoup  # Removed unused SoupStrainer
 from urllib.parse import urljoin, urlparse
 from collections import deque
+from tqdm import tqdm  # Import tqdm for progress bar
 
 # Assuming utils.py is in the same directory or src is in PYTHONPATH
 try:
     from .utils import retry_with_backoff, get_website_name
 except ImportError:
     # Fallback for standalone execution or different project structure
-    from utils import retry_with_backoff, get_website_name
+    from utils import retry_with_backoff  # Removed unused get_website_name
 
 
 logger = logging.getLogger(__name__)
@@ -160,54 +162,74 @@ def crawl_navigation(start_url, css_selector):
     # Queue stores (url_to_crawl, parent_node_in_tree)
     visited = {start_url}
     start_domain = urlparse(start_url).netloc
+    initial_queue_size = len(queue) # For tqdm total, though queue size changes
 
-    while queue:
-        current_url, parent_node = queue.popleft()
-        logger.debug(f"Processing URL: {current_url}")
+    # Wrap the loop with tqdm for progress visualization
+    # Note: Total might be inaccurate as queue grows, but gives an indication.
+    # Using unit='URL' for clarity. Leave=False cleans up bar on completion.
+    with tqdm(
+        total=initial_queue_size,
+        desc=f"Crawling {start_domain}",
+        unit="URL",
+        leave=False
+    ) as pbar:
+        while queue:
+            current_url, parent_node = queue.popleft()
+            pbar.set_description(f"Processing {current_url[-50:]}")
+            # Show current URL (truncated)
+            logger.debug(f"Processing URL: {current_url}")
 
-        html = fetch_html(current_url)
-        if not html:
-            logger.warning(
-                f"Failed to fetch HTML for {current_url}, skipping."
-            )
-            continue  # Skip this URL if fetching failed
-
-        links = find_nav_links(html, current_url, css_selector)
-        if not links:
-            logger.debug(
-                f"No navigation links found on {current_url} with selector '{css_selector}'."
-            )
-            # Even if no links found here, the page itself might be a valid
-            #  node
-            # We need to ensure the start_url gets added if it wasn't already
-            #  a child
-            if current_url == start_url and not parent_node:
-                # This logic needs refinement - how do we get the 'name' for
-                #  the start_url itself?
-                # For now, we assume the start_url is the root and its
-                #  children are added below.
-                # The structure might need a dedicated root node.
-                pass
-                # Root is implicitly handled by the initial nav_tree structure
-
-        for link_text, link_url in links:
-            # Basic check to stay on the same domain
-            if urlparse(link_url).netloc != start_domain:
-                logger.debug(f"Skipping off-domain link: {link_url}")
-                continue
-
-            if link_url not in visited:
-                visited.add(link_url)
-                logger.debug(
-                    f"Adding new link to queue: {link_url} (from {current_url})"
+            # --- Start of indented block ---
+            html = fetch_html(current_url)
+            if not html:
+                logger.warning(
+                    f"Failed to fetch HTML for {current_url}, skipping."
                 )
-                # Add the new node to the parent's children
-                new_node = {'name': link_text, 'children': {}}
-                parent_node[link_url] = new_node
-                # Add the new URL to the queue to crawl its children
-                queue.append((link_url, new_node['children']))
-            # else: # If already visited, do not add it again to enforce a strict tree structure.
-            #     logger.debug(f"Skipping already visited link: {link_url} (found under {current_url})")
+                continue  # Skip this URL if fetching failed
+
+            links = find_nav_links(html, current_url, css_selector)
+            if not links:
+                logger.debug(
+                    f"No navigation links found on {current_url} with selector '{css_selector}'."
+                )
+                # Even if no links found here, the page itself might be a valid
+                #  node
+                # We need to ensure the start_url gets added if it wasn't already
+                #  a child
+                if current_url == start_url and not parent_node:
+                    # This logic needs refinement - how do we get the 'name' for
+                    #  the start_url itself?
+                    # For now, we assume the start_url is the root and its
+                    #  children are added below.
+                    # The structure might need a dedicated root node.
+                    pass
+                    # Root is implicitly handled by the initial nav_tree structure
+
+            for link_text, link_url in links:
+                # Basic check to stay on the same domain
+                if urlparse(link_url).netloc != start_domain:
+                    logger.debug(f"Skipping off-domain link: {link_url}")
+                    continue
+
+                if link_url not in visited:
+                    visited.add(link_url)
+                    logger.debug(
+                        f"Adding new link to queue: {link_url} (from {current_url})"
+                    )
+                    # Add the new node to the parent's children
+                    new_node = {'name': link_text, 'children': {}}
+                    parent_node[link_url] = new_node
+                    # Add the new URL to the queue to crawl its children
+                    queue.append((link_url, new_node['children']))
+                    pbar.total += 1
+                    # Increment total as we add new URLs to the queue
+                # else: # If already visited, do not add it again to enforce a
+                #  strict tree structure.
+                #     logger.debug(f"Skipping already visited link: {link_url}
+                #  (found under {current_url})")
+                pbar.update(1)
+            # --- End of indented block ---
+            # Update progress bar after processing one URL from the queue
 
     # The initial nav_tree might be empty if the start_url fetch failed.
     # We need a way to represent the root node itself. Let's wrap the result.

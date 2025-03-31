@@ -17,7 +17,7 @@ This project aims to generate navigation map markdown files for websites based o
 3.  **`src/crawler.py`:**
     - `fetch_html`: Fetches website content using `requests` with retry logic via decorator.
     - `find_nav_links`: Parses HTML using `BeautifulSoup` to find links within a specified CSS selector.
-    - `crawl_navigation`: Performs breadth-first traversal of navigation links within the same domain, handling visited URLs. Returns a nested dictionary representing the site structure.
+    - `crawl_navigation`: Performs breadth-first traversal of navigation links within the same domain, handling visited URLs and displaying progress using `tqdm`. Returns a nested dictionary representing the site structure.
     - `format_tree`: Converts the nested dictionary into a markdown tree string.
 4.  **`src/file_writer.py`:**
     - `generate_filename`: Creates the output filename (e.g., `output_maps/example_com_nav_map.md`).
@@ -78,6 +78,8 @@ graph LR
 - Implemented `main.py` CLI integration.
 - Added initial unit tests in `tests/`.
 - Updated Memory Bank documents through Phase 4 completion.
+- Fixed crawler bug causing duplicate URLs in output.
+- Added `tqdm` progress bar to crawler.
 
 ## User Feedback Integration
 

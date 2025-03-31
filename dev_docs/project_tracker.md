@@ -20,6 +20,7 @@ This document tracks the progress of the Website Navigation Map generator projec
   - [x] Handle invalid input and re-prompt.
   - [x] Handle "exit" command.
   - [x] Trigger crawling process upon valid selection.
+  - [x] Add progress bar (`tqdm`) for crawling phase.
 - [x] **Feature: Website Navigation Crawling**
   - [x] Implement function to fetch website HTML content.
   - [x] Implement logic to identify navigation menu elements (requires robust selectors).
@@ -92,12 +93,14 @@ This document tracks the progress of the Website Navigation Map generator projec
 - Code Refinement (Test file docstrings).
 - Create README.md, CHANGELOG.md, .clineignore.
 - GitHub Repository Setup (Create repo, push initial commit).
+- Add `tqdm` progress bar.
+- Fix indentation error in `src/crawler.py`.
 
 ## Memory Bank Document Versions
 
 - `project_brief.md`: v1.0 (Initial) - 2025-03-30
-- `codebase_summary.md`: v1.2 (Reflect implemented code) - 2025-03-31
-- `tech_stack.md`: v1.0 (Initial) - 2025-03-30
-- `current_task.md`: v1.7 (GitHub setup complete) - 2025-03-31
-- `project_tracker.md`: v1.6 (GitHub setup complete) - 2025-03-31
+- `codebase_summary.md`: v1.3 (Add tqdm) - 2025-03-31
+- `tech_stack.md`: v1.1 (Add tqdm) - 2025-03-31
+- `current_task.md`: v1.9 (Fix crawler indentation) - 2025-03-31
+- `project_tracker.md`: v1.8 (Fix crawler indentation) - 2025-03-31
 - `implementation_plan.md`: v1.2 (Added concurrency enhancements) - 2025-03-30

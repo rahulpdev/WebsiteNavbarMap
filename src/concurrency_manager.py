@@ -167,7 +167,7 @@ class ConcurrencyManager:
         # Wait for all submitted futures to complete and collect results
         for future in concurrent.futures.as_completed(self.futures):
             try:
-                result = future.result() # Get the result dict from the worker
+                result = future.result()  # Get the result dict from the worker
                 results.append(result)
                 logger.debug(f"Task completed: {result}")
             except Exception as e:

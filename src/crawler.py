@@ -276,7 +276,7 @@ def format_tree(nav_data):
     # Recursively format its children
     output += _format_tree_recursive(root_node.get('children', {}))
 
-    return output.strip() # Remove trailing newline if any
+    return output.strip()  # Remove trailing newline if any
 
 
 # Example usage (optional)

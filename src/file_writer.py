@@ -171,11 +171,11 @@ if __name__ == '__main__':
 
     print("\n--- Testing write_map_file ---")
     test_content = """
-https://www.example-site.co.uk/path
-├── https://www.example-site.co.uk/path/page1
-└── https://www.example-site.co.uk/path/page2
-    └── https://www.example-site.co.uk/path/page2/subpage
-"""
+    https://www.example-site.co.uk/path
+    ├── https://www.example-site.co.uk/path/page1
+    └── https://www.example-site.co.uk/path/page2
+        └── https://www.example-site.co.uk/path/page2/subpage
+    """
     if filename:
         success = write_map_file(filename, test_content)
         print(f"Write successful for {filename}: {success}")

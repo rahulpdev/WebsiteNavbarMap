@@ -67,7 +67,8 @@ def main():
 
     if not url_selector_pairs:
         print(
-            "No valid URLs found in the 'input_csvs' directory. Please check your CSV files."
+            "No valid URLs found in the 'input_csvs' directory. Please check"
+            " your CSV files."
         )
         logger.warning("Exiting: No valid URLs found.")
         sys.exit(0)

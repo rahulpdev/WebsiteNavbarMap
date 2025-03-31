@@ -10,7 +10,8 @@ Phases 1 through 4 are complete. The core application logic, including CSV proce
 
 ## Context Update
 
-All planned coding, testing (initial unit tests), refinement, and documentation tasks (Memory Bank updates, README, CHANGELOG, .clineignore) are complete.
+- Fixed deprecated `datetime.utcfromtimestamp` method in `src/logger_config.py` based on Pylance hint. Ignored resulting Flake8 style warnings (line length, spacing) as per `.clinerules/02_coding.md`.
+- All planned coding, testing (initial unit tests), refinement, and documentation tasks (Memory Bank updates, README, CHANGELOG, .clineignore) are complete.
 
 ## Next Steps
 

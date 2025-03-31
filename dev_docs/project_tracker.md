@@ -96,6 +96,6 @@ This document tracks the progress of the Website Navigation Map generator projec
 - `project_brief.md`: v1.0 (Initial) - 2025-03-30
 - `codebase_summary.md`: v1.1 (Added implementation plan ref) - 2025-03-30
 - `tech_stack.md`: v1.0 (Initial) - 2025-03-30
-- `current_task.md`: v1.5 (Start Phase 5, Step 12) - 2025-03-31
+- `current_task.md`: v1.6 (Documented logger fix) - 2025-03-31
 - `project_tracker.md`: v1.5 (Updated after Phase 4) - 2025-03-31
 - `implementation_plan.md`: v1.2 (Added concurrency enhancements) - 2025-03-30

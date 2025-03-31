@@ -3,14 +3,14 @@ import logging.handlers
 import json
 import os
 import threading
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class JsonFormatter(logging.Formatter):
     """Custom formatter to output log records as JSON."""
     def format(self, record):
         log_record = {
-            "timestamp": datetime.utcfromtimestamp(record.created).isoformat() + "Z",
+            "timestamp": datetime.fromtimestamp(record.created, tz=timezone.utc).isoformat(),
             "level": record.levelname,
             "message": record.getMessage(),
             "logger_name": record.name,

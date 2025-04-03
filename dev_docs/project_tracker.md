@@ -96,12 +96,13 @@ This document tracks the progress of the Website Navigation Map generator projec
 - Add `tqdm` progress bar.
 - Fix crawler bugs (duplicate URLs, indentation).
 - User verification of successful run and output.
+- **Modify Filename Generation (2025-03-04):** Updated `src/utils.py` (`get_website_name`) to include the first URL path segment in the output filename.
 
 ## Memory Bank Document Versions
 
 - `project_brief.md`: v1.0 (Initial) - 2025-03-30
 - `codebase_summary.md`: v1.3 (Add tqdm) - 2025-03-31
 - `tech_stack.md`: v1.1 (Add tqdm) - 2025-03-31
-- `current_task.md`: v1.11 (Project Complete) - 2025-03-31
-- `project_tracker.md`: v1.10 (Project Complete) - 2025-03-31
-- `implementation_plan.md`: v1.2 (Added concurrency enhancements) - 2025-03-30
+- `current_task.md`: v1.12 (Filename Mod) - 2025-03-04
+- `project_tracker.md`: v1.11 (Filename Mod) - 2025-03-04
+- `implementation_plan.md`: v1.3 (Filename Mod) - 2025-03-04

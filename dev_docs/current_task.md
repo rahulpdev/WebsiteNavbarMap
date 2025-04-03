@@ -6,18 +6,20 @@ Phases 1 through 4 are complete. The core application logic, including CSV proce
 
 ## Current Focus
 
-- Project Complete.
+- **Completed:** Filename generation logic modification.
 
 ## Context Update
 
-- Fixed deprecated `datetime.utcfromtimestamp` method in `src/logger_config.py`.
-- All planned coding, testing (initial unit tests), refinement, and documentation tasks are complete.
-- User has confirmed completion of GitHub repository creation and initial push.
-- **Bug Fix:** Corrected crawler logic in `src/crawler.py` to prevent duplicate URLs.
-- **Enhancement:** Added `tqdm` progress bar to `src/crawler.py`.
-- **Verification:** User confirmed successful script execution with correct output (no duplicates) and working progress bar after the latest changes. An example map file was generated.
-- **Finalization:** User confirmed final commit and push of all code changes, Memory Bank updates, and the example map file to the GitHub repository.
+- **Previous State:** Project was considered complete after final commit and push.
+- **New Requirement (2025-03-04):** User requested a change to the output filename generation. Instead of just using the sanitized domain (e.g., `developer_gocardless_com`), the filename should now include the sanitized first path segment as well (e.g., `developer_gocardless_com_api_reference`). This affects the `get_website_name` function in `src/utils.py`.
+- **Implementation (2025-03-04):**
+  - Updated `dev_docs/implementation_plan.md`.
+  - Modified `src/utils.py::get_website_name`.
+  - Updated `dev_docs/project_tracker.md`.
+  - Updated `CHANGELOG.md`.
+  - Reminded user to commit changes.
+  - Reviewed Memory Bank post-update.
 
 ## Next Steps
 
-- No further steps. The project is complete as per the requirements in `project_brief.md`.
+- Awaiting user confirmation or further instructions. (User should commit changes).

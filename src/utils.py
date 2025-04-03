@@ -10,46 +10,69 @@ logger = logging.getLogger(__name__)
 
 def get_website_name(url):
     """
-    Generates a filesystem-safe name from a URL.
+    Generates a filesystem-safe name from a URL, including the first path segment.
 
-    Removes scheme (http/https), replaces common separators with underscores,
-    and removes potentially problematic characters.
+    Removes scheme, combines domain and first path segment, replaces common
+    separators with underscores, and removes potentially problematic characters.
 
     Args:
         url (str): The URL to process.
 
     Returns:
-        str: A filesystem-safe string derived from the URL's domain,
+        str: A filesystem-safe string derived from the URL's domain and first path,
              or "invalid_url" if the URL is malformed.
     """
     if not url:
         return "invalid_url"
     try:
         parsed_url = urlparse(url)
-        # Use netloc (domain) as the base for the name
         domain = parsed_url.netloc
-        if not domain:
-            # Fallback if netloc is empty but path might contain something
-            #  usable
-            domain = parsed_url.path.strip('/')
-            if not domain:
-                return "invalid_url"
+        path = parsed_url.path.strip('/') # Get path and remove leading/trailing slashes
 
-        # Remove www. prefix if present
+        if not domain:
+            # Fallback if netloc is empty (less common for http/https)
+            # Attempt to use the first part of the path as domain if path exists
+            path_parts = path.split('/')
+            domain = path_parts[0] if path else ''
+            if not domain:
+                return "invalid_url" # Still no usable part
+            # Adjust path if the first part was used as domain
+            path = '/'.join(path_parts[1:])
+
+        # Sanitize domain
         if domain.startswith("www."):
             domain = domain[4:]
+        sanitized_domain = domain.replace('.', '_').replace('-', '_')
+        sanitized_domain = re.sub(r'[^\w_]+', '', sanitized_domain).lower()
 
-        # Replace dots and hyphens with underscores
-        safe_name = domain.replace('.', '_').replace('-', '_')
+        if not sanitized_domain:
+             # If domain sanitization results in empty, return error
+             # Example: URL like "http://.../" might lead here if path fallback fails
+             return "sanitized_domain_empty"
 
-        # Remove any characters that are not alphanumeric or underscore
-        safe_name = re.sub(r'[^\w_]+', '', safe_name)
+        # Process first path segment
+        sanitized_segment = ""
+        if path:
+            path_segments = path.split('/')
+            # Ensure path_segments is not empty and the first segment is not empty
+            if path_segments and path_segments[0]:
+                first_segment = path_segments[0]
+                # Sanitize the first segment
+                sanitized_segment = first_segment.replace('.', '_').replace('-', '_')
+                sanitized_segment = re.sub(r'[^\w_]+', '', sanitized_segment).lower()
 
-        # Ensure the name is not empty after sanitization
+        # Combine domain and segment if segment exists and is not empty
+        if sanitized_segment:
+            safe_name = f"{sanitized_domain}_{sanitized_segment}"
+        else:
+            safe_name = sanitized_domain
+
+        # Final check for empty result after potential segment processing
         if not safe_name:
-            return "sanitized_url_empty"
+            # This case should be rare if sanitized_domain was valid
+            return "sanitized_name_empty"
 
-        return safe_name.lower() # Return lowercase for consistency
+        return safe_name
 
     except Exception as e:
         logger.error(f"Error parsing URL '{url}' for website name: {e}")

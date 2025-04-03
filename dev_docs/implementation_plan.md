@@ -123,6 +123,11 @@ This document outlines the step-by-step plan for developing the Website Navigati
     - Add docstrings and comments to the Python code, especially explaining the concurrency logic.
     - Create a comprehensive `README.md` for the GitHub repository, explaining setup, usage, concurrency model, and project structure.
 13. **GitHub:**
+
     - Push final code and documentation to the public GitHub repository.
     - Ensure at least one example `_nav_map.md` is included or generated as part of a test/demo run.
     - Verify all completion criteria from `project_brief.md` are met.
+
+14. **Post-Completion Modification (2025-03-04): Filename Generation Update:**
+    - **Requirement:** Modify the output filename to include the first URL path segment after the domain (e.g., `domain_com_pathsegment_nav_map.md`). Handle cases with and without paths correctly.
+    - **Action:** Update the `get_website_name` function in `src/utils.py` to parse the URL path, extract and sanitize the first segment, and combine it with the sanitized domain name.
